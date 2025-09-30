@@ -1,82 +1,56 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="ar">
 <head>
-  <meta charset="utf-8">
-  <title>Crash Mini App</title>
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <meta charset="UTF-8">
+  <title>🛍️ متجر مصغّر</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
       font-family: sans-serif;
+      background: #f9f9f9;
+      margin: 0;
+      padding: 10px;
       text-align: center;
-      padding: 20px;
-      background: #111;
-      color: #fff;
     }
-    h2 {
-      color: #0ff;
+    .card {
+      background: #fff;
+      border-radius: 15px;
+      padding: 15px;
+      margin: 10px 0;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
-    #mult {
-      font-size: 50px;
-      margin: 30px 0;
-    }
-    button {
+    .btn {
+      display: inline-block;
+      background: #0088cc;
+      color: white;
       padding: 10px 20px;
-      margin: 5px;
-      border: none;
-      border-radius: 8px;
-      font-size: 18px;
-      cursor: pointer;
+      margin-top: 10px;
+      border-radius: 10px;
+      text-decoration: none;
     }
-    .bet { background: #007bff; color: #fff; }
-    .cash { background: #28a745; color: #fff; }
-    #log { margin-top: 20px; font-size: 18px; }
   </style>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
-  <h2>🚀 Crash Game</h2>
-  <div id="mult">1.00x</div>
-  <button id="betBtn" class="bet">🎲 Bet 10</button>
-  <button id="cashBtn" class="cash" disabled>💰 Cash Out</button>
-  <div id="log">Start betting to play!</div>
+  <h2>🛍️ متجر المنتجات</h2>
 
-<script>
-let running = false, multiplier = 1, crashAt = 0, timer;
+  <div class="card">
+    <h3>🎧 سماعات</h3>
+    <p>💵 25$</p>
+    <button class="btn" onclick="buy('سماعات - 25$')">شراء</button>
+  </div>
 
-const multEl = document.getElementById("mult");
-const logEl = document.getElementById("log");
-const betBtn = document.getElementById("betBtn");
-const cashBtn = document.getElementById("cashBtn");
+  <div class="card">
+    <h3>⌚ ساعة ذكية</h3>
+    <p>💵 40$</p>
+    <button class="btn" onclick="buy('ساعة ذكية - 40$')">شراء</button>
+  </div>
 
-betBtn.onclick = () => {
-  if (running) return;
-  running = true;
-  crashAt = 1.5 + Math.random() * 5; // انهيار عشوائي بين 1.5 و 6.5
-  multiplier = 1.0;
-  logEl.innerText = "🚀 Bet Placed!";
-  cashBtn.disabled = false;
-
-  timer = setInterval(() => {
-    multiplier += 0.05 * multiplier;
-    multEl.innerText = multiplier.toFixed(2) + "x";
-
-    if (multiplier >= crashAt) {
-      clearInterval(timer);
-      running = false;
-      multEl.innerText = crashAt.toFixed(2) + "x 💥 CRASH";
-      cashBtn.disabled = true;
-      logEl.innerText = "❌ You lost!";
+  <script>
+    function buy(product) {
+      Telegram.WebApp.sendData(product); // يرسل البيانات للبوت
+      Telegram.WebApp.close(); // يغلق المتجر المصغّر
     }
-  }, 500);
-};
-
-cashBtn.onclick = () => {
-  if (!running) return;
-  clearInterval(timer);
-  running = false;
-  const win = (10 * multiplier).toFixed(2);
-  logEl.innerText = `✅ Cashed out at ${multiplier.toFixed(2)}x → Win ${win}`;
-  cashBtn.disabled = true;
-};
-</script>
+  </script>
 </body>
 </html>
